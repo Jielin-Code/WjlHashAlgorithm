@@ -36,11 +36,13 @@ public static void main(String[] args) {
 
 ```
 public static void main(String[] args) {
-		//Input parameter is the output length of the Hash which is changeable 
+		//Input parameter is the output length of the Hash which is changeable
+		//32 byte refers to 256 bits. This value can be defined according to the number of bytes. 
+		//It can be 16 * 8 = 128 bits or 37 * 8 = 296 bits, which means that it can be set as per desired.
 		WJLHashAlgorithm hashAlgorithm=new WJLHashAlgorithm(32);
 		//Add Secret key
-		hashAlgorithm.setSecretKey(1);
-		String string= hashAlgorithm.encrypt("abc");
+		hashAlgorithm.setSecretKey(1); //A Secret key, which can be any value from 0 to 999999.
+		String string= hashAlgorithm.encrypt("abc"); //"ABC" is a  input string to be encoded
 		System.out.print(string);
 	}
 
