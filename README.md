@@ -15,14 +15,32 @@ If you have any problem or suggestion to this program, feel free to contract me 
 My CSDN:  https://blog.csdn.net/wjlxueshu
 My E-mail: 254908447@qq.com
 
-# Usage of the Jielin-HashAlgorithm ([WjlHashAlgorithm.Jar](https://github.com/Jielin-Wang/WjlHashAlgorithm/raw/master/WJLHashAlgorithm%201.0.1.jar))
+# Usage of the Jielin-HashAlgorithm
 
+### [WjlHashAlgorithm1.0.1.Jar](https://github.com/Jielin-Wang/WjlHashAlgorithm/raw/master/WJLHashAlgorithm%201.0.1.jar)
 Download the WjlHashAlgorithm.Jar and import as a external JAR in the project directory and test with the following code.
 ```
 public static void main(String[] args) {
 		//Input parameter is the output length of the Hash which is changeable 
 		WJLHashAlgorithm hashAlgorithm=new WJLHashAlgorithm(16);
-		String string= hashAlgorithm.encrypt("");
+		String string= hashAlgorithm.encrypt("abc");
+		System.out.print(string);
+	}
+
+```
+### [WjlHashAlgorithm2.0.0.Jar](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/WJLHashAlgorithm%202.0.0.jar)
+
+- 1. Customize the bit length (or bytes) of the output hash value, there is no limit for the time being.
+- 2. Support the user to input the digital password and encode the own hash value.
+- 3. Added a Method "setSecretKey". Different secret key have different Hash for the same input.
+
+```
+public static void main(String[] args) {
+		//Input parameter is the output length of the Hash which is changeable 
+		WJLHashAlgorithm hashAlgorithm=new WJLHashAlgorithm(32);
+		//Add Secret key
+		hashAlgorithm.setSecretKey(1);
+		String string= hashAlgorithm.encrypt("abc");
 		System.out.print(string);
 	}
 
