@@ -13,7 +13,7 @@ However, this version (WjlHashAlgorithm 1.0.1) is the first version of this algo
 If you have any problem or suggestion to this program, feel free to contract me as:
 
 My CSDN:  https://blog.csdn.net/wjlxueshu
-My E-mail: 3619023738@qq.com
+My E-mail: wangjielin@rilled.cn
 
 # Usage of the Jielin-HashAlgorithm
 
