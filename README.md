@@ -47,6 +47,10 @@ public static void main(String[] args) {
 	}
 
 ```
+### [WjlHashAlgorithm2.0.1.Jar](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/WJLHashAlgorithm2.0.1.jar)
+- 1. Fixed some Bug
+- 2. Synchronize WjlHashAlgorithm in C and JAVA.
+The Testing way is same as before.
 
 Lenght of the Hash value is changable and can be generated with a desired Hash length(Hash value as input parameter to the constructor).
 
