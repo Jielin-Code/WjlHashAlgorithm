@@ -15,7 +15,7 @@ If you have any problem or suggestion to this program, feel free to contract me 
 My CSDN:  https://blog.csdn.net/wjlxueshu
 My E-mail: wangjielin@rilled.cn
 
-# Usage of the Jielin-HashAlgorithm
+# Usage of the Jielin-HashAlgorithm in Java and for C ([Click-here](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/README%20for%20C.md))
 
 ### [WjlHashAlgorithm1.0.1.Jar](https://github.com/Jielin-Wang/WjlHashAlgorithm/raw/master/WJLHashAlgorithm%201.0.1.jar)
 Download the WjlHashAlgorithm.Jar and import as a external JAR in the project directory and test with the following code.
