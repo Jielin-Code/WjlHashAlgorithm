@@ -15,7 +15,7 @@ If you have any problem or suggestion to this program, feel free to contract me 
 My CSDN:  https://blog.csdn.net/wjlxueshu
 My E-mail: wangjielin@rilled.cn
 
-# Usage of the Jielin-HashAlgorithm in Java and for C ([Click-here](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/README%20for%20C.md))
+## Usage of the Jielin-HashAlgorithm in Java and for C ([Click-here](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/README%20for%20C.md))
 
 ### [WjlHashAlgorithm2.1.0.Jar](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/WJLHashAlgorithm2.1.0.jar)
 - 1. Speed optimization 
