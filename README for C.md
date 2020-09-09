@@ -1,6 +1,6 @@
 # Usage of the Jielin-HashAlgorithm in C
 
-Download the WjlHashAlgorithm C library [WjlHashAlgorithm2.0.1.zip](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/WJLHashAlgorithm2.0.1(lib%20for%20C).zip), Which have two folders (include and lib). Copy these folders in your project directory. Use it in the following way.
+Download the latest version of WjlHashAlgorithm C library [WjlHashAlgorithm2.1.0.zip](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/WJLHashAlgorithm2.1.0(lib%20for%20C).zip), Which have two folders (include and lib). Copy these folders in your project directory. Use it in the following way.
 
 ### Step1. 
 Put the following lines in the C file and edit the directory path as per your project directory. 
