@@ -16,6 +16,10 @@ My CSDN:  https://blog.csdn.net/wjlxueshu
 My E-mail: wangjielin@rilled.cn
 
 ## Usage of the Jielin-HashAlgorithm in Java and for C ([Click-here](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/README%20for%20C.md))
+### [WjlHashAlgorithm2.1.0.Jar](https://github.com/Jielin-Code/WjlHashAlgorithm/tree/master/WJLHA3)
+- 1. Sequence segmentation and XOR operation are added.
+- 2. Nonlinear wheel functions with weighted coefficients are utilized.
+- 3. More powerful ans safer Hash alforithm.
 
 ### [WjlHashAlgorithm2.1.0.Jar](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/WJLHashAlgorithm2.1.0.jar)
 - 1. Speed optimization 
