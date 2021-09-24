@@ -1,4 +1,4 @@
-﻿#include "WJLHA3.h"
+#include "WJLHA3.h"
 extern const unsigned char RandomOfUCharTable[256];
 extern const unsigned char RandomOfbitTable[256];
 extern const unsigned char bitOfByteTable[256][8];
@@ -152,8 +152,8 @@ double TheCOEofY(WJLCoder *coder, int partIndex, int paragraphs, unsigned char *
 // Output bytes to cache and weighted encoding
 void OutPutByte(WJLCoder *coder, unsigned char ucByte)
 {
-	coder->HashValueBuFF[ coder->EOut_buff_loop % coder->HashValueBuFF_Length ] = coder->HashValueBuFF[ coder->EOut_buff_loop % coder->HashValueBuFF_Length ] ^ (unsigned char)ucByte;
-	coder->EOut_buff_loop = coder->EOut_buff_loop + 1;
+	coder->HashValueBuFF[ coder->EOut_buff_loop % coder->HashValueBuFF_Length ] = (unsigned char)((unsigned int)coder->HashValueBuFF[ coder->EOut_buff_loop % coder->HashValueBuFF_Length ] + (unsigned int)ucByte);
+	coder->EOut_buff_loop ++;
 }
 // Encode by JielinCeo
 void Encode(WJLCoder *coder, unsigned char symbol)
@@ -259,7 +259,7 @@ void WJLHA3(unsigned char *InBytesBuFF, int InBytesBuFF_Length, unsigned char *k
 	InitializationWJLCoder(coder);
 	coder->HashValueBuFF_Length = HashValueBuFF_Length;
 	coder->HashValueBuFF  = (unsigned char *)malloc(HashValueBuFF_Length);
-	// 下面并没解决问题
+
 	if(InBytesBuFF_Length < 256){
 		tempInbuff = (unsigned char *)malloc(256);
 		memcpy(tempInbuff, InBytesBuFF, InBytesBuFF_Length);
