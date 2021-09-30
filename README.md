@@ -22,62 +22,61 @@ My E-mail: wangjielin@rilled.cn
 - 3. More powerful ans safer Hash algorithm.
 - 4. Completely open source.
 - 
-#include "WJLHA3.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <windows.h>
-#include <time.h>
-#include <math.h>
-#ifdef WIN32
-#define  inline __inline
-#endif // WIN32
 
-// test
-int main(){
-	long t1,t2;
-	int i = 0, tmp = 0;
-	int InBUFF_Length = 35;
-	int HashValueBuFF_Length = 4; 
-	int keyt_Length = 16;
-	unsigned char *In_BUFF;
-	unsigned char *HashValue_BUFF;
-	unsigned char *keyt_BUFF;
-	
-	In_BUFF = (unsigned char *)malloc(InBUFF_Length);
-	HashValue_BUFF = (unsigned char *)malloc(HashValueBuFF_Length);
-	keyt_BUFF  = (unsigned char *)malloc(keyt_Length);
+	#include "WJLHA3.h"
+	#include <stdio.h>
+	#include <string.h>
+	#include <stdlib.h>
+	#include <windows.h>
+	#include <time.h>
+	#include <math.h>
+	#ifdef WIN32
+	#define  inline __inline
+	#endif
+	int main(){
+		long t1,t2;
+		int i = 0, tmp = 0;
+		int InBUFF_Length = 35;
+		int HashValueBuFF_Length = 4; 
+		int keyt_Length = 16;
+		unsigned char *In_BUFF;
+		unsigned char *HashValue_BUFF;
+		unsigned char *keyt_BUFF;
 
-	srand((unsigned)time(NULL));
-	printf("\n");
-	for(i = 0; i < InBUFF_Length; ++i){
-		In_BUFF[i] = rand() % 256;//(unsigned char)(i % 256);
-		printf("%02X ", In_BUFF[i]);
+		In_BUFF = (unsigned char *)malloc(InBUFF_Length);
+		HashValue_BUFF = (unsigned char *)malloc(HashValueBuFF_Length);
+		keyt_BUFF  = (unsigned char *)malloc(keyt_Length);
+
+		srand((unsigned)time(NULL));
+		printf("\n");
+		for(i = 0; i < InBUFF_Length; ++i){
+			In_BUFF[i] = rand() % 256;//(unsigned char)(i % 256);
+			printf("%02X ", In_BUFF[i]);
+		}
+		printf("\n");
+		for(i = 0; i < keyt_Length; ++i){
+			keyt_BUFF[i] = 0x00;//rand() % 256;//(unsigned char)(i % 255);
+			printf("%02X ", keyt_BUFF[i]);
+		}
+
+		printf("\n");
+		t1 = GetTickCount();
+		WJLHA3(In_BUFF, InBUFF_Length, keyt_BUFF, keyt_Length, HashValue_BUFF, HashValueBuFF_Length);
+		t2 = GetTickCount();
+		printf("%d ms\n", t2 - t1);
+		printf("\nWJLHA：");
+		for(i = 0; i < HashValueBuFF_Length; ++i){
+			printf("%d,",(char)HashValue_BUFF[i]);
+		}
+		printf("\n");
+		printf("\nWJLHA：");
+		for(i = 0; i < HashValueBuFF_Length; ++i){
+			printf("%02X ",HashValue_BUFF[i]);
+		}
+		printf("\n");
+		system("pause");
+		return 0;
 	}
-	printf("\n");
-	for(i = 0; i < keyt_Length; ++i){
-		keyt_BUFF[i] = 0x00;//rand() % 256;//(unsigned char)(i % 255);
-		printf("%02X ", keyt_BUFF[i]);
-	}
-	
-	printf("\n");
-	t1 = GetTickCount();
-	WJLHA3(In_BUFF, InBUFF_Length, keyt_BUFF, keyt_Length, HashValue_BUFF, HashValueBuFF_Length);
-	t2 = GetTickCount();
-	printf("%d ms\n", t2 - t1);
-	printf("\nWJLHA：");
-	for(i = 0; i < HashValueBuFF_Length; ++i){
-		printf("%d,",(char)HashValue_BUFF[i]);
-	}
-	printf("\n");
-	printf("\nWJLHA：");
-	for(i = 0; i < HashValueBuFF_Length; ++i){
-		printf("%02X ",HashValue_BUFF[i]);
-	}
-	printf("\n");
-	system("pause");
-	return 0;
-}
 
 All professionals are welcome to test our algorithm and your coments will be appreciable.  
 
