@@ -2,7 +2,7 @@
 extern const unsigned char RandomOfUCharTable[256];
 extern const unsigned char RandomOfbitTable[256];
 extern const unsigned char bitOfByteTable[256][8];
-extern const unsigned int Ps = 256;// Customizable
+extern const unsigned int Ps = 8;// Customizable
 // Jielincode Encoding Struct
 typedef struct
 {
@@ -243,7 +243,7 @@ void InitializationWJLCoder(WJLCoder *coder)
 // the main function
 void WJLHA3(unsigned char *InBytesBuFF, int InBytesBuFF_Length, unsigned char *keytBuFF, int keytBuFF_Length, unsigned char *HashValueBuFF, int HashValueBuFF_Length)
 {
-	unsigned char *Y, *tempInbuff;
+	unsigned char *Y;
 	int Y_len = Ps, i = 0, j = 0;
 	unsigned int k = 0;
 	int partIndex = 0, paragraphs = 0;
@@ -259,18 +259,7 @@ void WJLHA3(unsigned char *InBytesBuFF, int InBytesBuFF_Length, unsigned char *k
 	InitializationWJLCoder(coder);
 	coder->HashValueBuFF_Length = HashValueBuFF_Length;
 	coder->HashValueBuFF  = (unsigned char *)malloc(HashValueBuFF_Length);
-
-	if(InBytesBuFF_Length < HashValueBuFF_Length){
-		tempInbuff = (unsigned char *)malloc(HashValueBuFF_Length);
-		memcpy(tempInbuff, InBytesBuFF, InBytesBuFF_Length);
-		for(i = InBytesBuFF_Length; i < HashValueBuFF_Length; ++i){
-			tempInbuff[i] = (unsigned char)(RandomOfUCharTable[i] + (InBytesBuFF[i % InBytesBuFF_Length] << 1) | 0x01 ) ^ (InBytesBuFF[i % InBytesBuFF_Length] + RandomOfbitTable[255 - i] + RandomOfUCharTable[i]);
-		}
-		InBytesBuFF_Length = HashValueBuFF_Length;
-	}else{
-		tempInbuff = InBytesBuFF;
-	}
-
+	
 	if(keytBuFF_Length > InBytesBuFF_Length * 8){
 		for(i = InBytesBuFF_Length * 8; i < keytBuFF_Length; ++i){
 			keytBuFF[i % (InBytesBuFF_Length * 8)] = (unsigned char)(keytBuFF[i % (InBytesBuFF_Length * 8)] * keytBuFF[i]) ^ (keytBuFF[i] + keytBuFF[i % (InBytesBuFF_Length * 8)]);
@@ -283,7 +272,7 @@ void WJLHA3(unsigned char *InBytesBuFF, int InBytesBuFF_Length, unsigned char *k
 		if(partIndex == paragraphs){
 			Y_len = InBytesBuFF_Length - (paragraphs - 1)* Ps;
 		}
-		memcpy(Y, tempInbuff + (partIndex - 1) * Ps, Y_len);
+		memcpy(Y, InBytesBuFF + (partIndex - 1) * Ps, Y_len);
 		// Get COE of Y
 		coe = TheCOEofY(coder, partIndex, paragraphs, Y, Y_len);
 		// Encode each bits
@@ -299,7 +288,6 @@ void WJLHA3(unsigned char *InBytesBuFF, int InBytesBuFF_Length, unsigned char *k
 	memcpy(HashValueBuFF, coder->HashValueBuFF, HashValueBuFF_Length);
 	// Free memory
 	free(Y);
-	free(tempInbuff);
 	free(coder->HashValueBuFF);
 	free(coder);
 }
