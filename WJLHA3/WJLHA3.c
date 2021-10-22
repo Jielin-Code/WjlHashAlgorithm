@@ -1,5 +1,4 @@
 #include "WJLHA3.h"
-extern const unsigned char bitOfByteTable[256][8];
 // Jielincode Encoding Struct
 typedef struct
 {
