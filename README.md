@@ -13,7 +13,7 @@ However, this version (WjlHashAlgorithm 1.0.1) is the first version of this algo
 If you have any problem or suggestion to this program, feel free to contract me as:
 
 My CSDN:  https://blog.csdn.net/wjlxueshu
-My E-mail: wangjielin@rilled.cn
+My E-mail: 254908447@qq.com
 
 ## Usage of the Jielin-HashAlgorithm in Java and for C ([Click-here](https://github.com/Jielin-Code/WjlHashAlgorithm/blob/master/README%20for%20C.md))
 ### [WJLHA3](https://github.com/Jielin-Code/WjlHashAlgorithm/tree/master/WJLHA3)
