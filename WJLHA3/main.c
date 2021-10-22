@@ -11,36 +11,34 @@
 
 // test
 int main(){
+	long t1,t2;
 	int i = 0, tmp = 0;
-	int InBUFF_Length = 100;// Length of the input  unit: byte
-	int HashValueBuFF_Length = 33; //Length of output  unit: byte
-	int keyt_Length = 257;// Length of private key
+	int InBUFF_Length = 1024;// The byte length entered
+	int HashValueBuFF_Length = 32; // Customize the byte length of the output hash
 	unsigned char *In_BUFF;
 	unsigned char *HashValue_BUFF;
-	unsigned char *keyt_BUFF;
+	// test
+	unsigned char In_BUFFs[35]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9'};
 
 	In_BUFF = (unsigned char *)malloc(InBUFF_Length);
 	HashValue_BUFF = (unsigned char *)malloc(HashValueBuFF_Length);
-	keyt_BUFF  = (unsigned char *)malloc(keyt_Length);
-	// andomly generate In_BUFF, length = InBUFF_Length
+	// Data of the InBUFF_Length length were randomly generated
+	srand((unsigned)time(NULL));
+	printf("\n");
 	for(i = 0; i < InBUFF_Length; ++i){
-		In_BUFF[i] = (unsigned char)(i % 256);
+		In_BUFF[i] = rand() % 256;//(unsigned char)(i % 256);
+		printf("%02X ", In_BUFF[i]);
 	}
-	for(i = 0; i < keyt_Length; ++i){
-		keyt_BUFF[i] = (unsigned char)(i % 255);
-	}
-	// Call WJLHA3 algorithm
+	
+	// WJLHA3
 	printf("\n");
-
-	WJLHA3(In_BUFF, InBUFF_Length, keyt_BUFF, keyt_Length, HashValue_BUFF, HashValueBuFF_Length);
-	printf("\n Signed WJLHA£º");
+	t1 = GetTickCount();
+	WJLHA3(In_BUFF, InBUFF_Length, HashValue_BUFF, HashValueBuFF_Length);
+	t2 = GetTickCount();
+	printf("Encoding takes time:%d ms\n", t2 - t1);
+	printf("\nWJLHA Stringï¼š");
 	for(i = 0; i < HashValueBuFF_Length; ++i){
-		printf("%d,",(char)HashValue_BUFF[i]);
-	}
-	printf("\n");
-	printf("\nWJLHA string£º");
-	for(i = 0; i < HashValueBuFF_Length; ++i){
-		printf("%02X",HashValue_BUFF[i]);
+		printf("%02X ",HashValue_BUFF[i]);
 	}
 	printf("\n");
 	system("pause");
