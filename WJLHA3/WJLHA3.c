@@ -6,10 +6,6 @@ typedef struct
 	unsigned int RC_SHIFT_BITS;
 	unsigned int RC_MAX_RANGE;
 	unsigned int RC_MIN_RANGE;
-	double p0;
-	double p1;
-	double H;
-	double COE;
 	double JIELINCOE;
 	unsigned int EFLow;
 	unsigned int EFRange;
@@ -17,34 +13,13 @@ typedef struct
 	unsigned int EFFollow;
 	unsigned int EOut_buff_loop;
 	unsigned char *HashValueBuFF;
-	int HashValueBuFF_Length;
+	unsigned int HashValueBuFF_Length;
+	unsigned int InBytesBuFF_Length;
 }WJLCoder;
 // Obtain a sequence X and obtain a weighted coefficient---JIELINCODE Coefficient
-void TheCOEofY(WJLCoder *coder, unsigned char *X, int X_len){
-	int i, j, Count0 = 0;
-	// Number of statistical symbols 0
-	for(i = 0; i < X_len; ++i){
-		for(j = 7; j >= 0; -- j) {
-			if( ((X[i] >> j) & 0x01) == 0 ){
-				Count0 ++;
-			}
-		}
-	}
-	// Get the probability p0 of symbol 0 and the probability p1 of symbol 1
-	coder->p0 = (double)Count0 / (double)(X_len * 8.0);
-	coder->p1 = 1.0 - coder->p0;
-	// Binary sequences of all 0 or all 1 need to be preprocessed
-	if(coder->p0 == 0.0){
-		coder->p0 = 0.0000000001;
-		coder->p1 = 1.0 - coder->p0;
-	}else if(coder->p1 == 0.0){
-		coder->p1 = 0.0000000001;
-		coder->p0 = 1.0 - coder->p1;
-	}
-	// get the standard information entropy
-	coder->H = -coder->p0 * (log(coder->p0)/log(2.0))- coder->p1 * (log(coder->p1)/log(2.0));
+void TheCOE(WJLCoder *coder){
 	// get the Jielin code coefficient
-	coder->COE = pow(   2.0, coder->H - ( ((double)coder->HashValueBuFF_Length) / (double)X_len )   );
+	coder->JIELINCOE = pow(   2.0, 1.0 - ( ((double)coder->HashValueBuFF_Length) / (double)coder->InBytesBuFF_Length )   );
 }
 // Output bytes to cache and weighted encoding
 void OutPutByte(WJLCoder *coder, unsigned char ucByte)
@@ -57,20 +32,9 @@ void Encode(WJLCoder *coder, unsigned char symbol)
 {	
 	unsigned int High = 0,i = 0;
 	if (1 == symbol){// the Symbol 1
-		if(coder->p0 <= coder->p1){
-			coder->EFLow = coder->EFLow +  (unsigned int)((double)coder->EFRange * coder->p0 * coder->JIELINCOE);
-			coder->EFRange = (unsigned int)((double)coder->EFRange * coder->p1 * coder->JIELINCOE);
-		}else{
-			coder->EFRange = (unsigned int)((double)coder->EFRange * coder->p0 * coder->JIELINCOE);
-		}
-	}else{
-		if(coder->p0 <= coder->p1){
-			coder->EFRange = (unsigned int)((double)coder->EFRange * coder->p0 * coder->JIELINCOE);
-		}else{
-			coder->EFLow = coder->EFLow +  (unsigned int)((double)coder->EFRange * coder->p0 * coder->JIELINCOE);
-			coder->EFRange = (unsigned int)((double)coder->EFRange * coder->p1 * coder->JIELINCOE);
-		}
+		coder->EFLow = coder->EFLow +  (unsigned int)((double)coder->EFRange * 0.5 * coder->JIELINCOE);
 	}
+	coder->EFRange = (unsigned int)((double)coder->EFRange * 0.5 * coder->JIELINCOE);
 	while(coder->EFRange <= coder->RC_MIN_RANGE){
 		High = coder->EFLow + coder->EFRange - 1;
 		if(coder->EFFollow != 0) {
@@ -136,10 +100,6 @@ void InitializationWJLCoder(WJLCoder *coder)
 	coder->RC_SHIFT_BITS = coder->RC_CODE_BITS - 8;
 	coder->RC_MAX_RANGE = 1 << coder->RC_CODE_BITS;
 	coder->RC_MIN_RANGE = 1 << coder->RC_SHIFT_BITS;
-	coder->p0 = 0.0;
-	coder->p1 = 0.0;
-	coder->H = 0.0;
-	coder->COE = 0.0;
 	coder->JIELINCOE = 0.0;
 	coder->EFLow = coder->RC_MAX_RANGE;
 	coder->EFRange = coder->RC_MAX_RANGE;
@@ -149,12 +109,10 @@ void InitializationWJLCoder(WJLCoder *coder)
 	coder->HashValueBuFF_Length = 0;
 }
 // the main function
-void WJLHA3(unsigned char *InBytesBuFF, int InBytesBuFF_Length, unsigned char *HashValueBuFF, int HashValueBuFF_Length)
+void WJLHA3(unsigned char *InBytesBuFF,unsigned int InBytesBuFF_Length, unsigned char *HashValueBuFF,unsigned int HashValueBuFF_Length)
 {
-	unsigned char *Y;
-	int Y_len = 0, i = 0, j = 0, k = 0;
+	int i = 0, j = 0;
 	WJLCoder *coder;
-	double tmpY_len = 0.0;
 	// Less than 4 bytes are easily collided
 	if(InBytesBuFF_Length < 4){
 		return;
@@ -168,9 +126,10 @@ void WJLHA3(unsigned char *InBytesBuFF, int InBytesBuFF_Length, unsigned char *H
 	coder->HashValueBuFF_Length = HashValueBuFF_Length;
 	coder->HashValueBuFF  = (unsigned char *)malloc(HashValueBuFF_Length);
 	memset(coder->HashValueBuFF, 0x00, HashValueBuFF_Length);
-	TheCOEofY(coder, InBytesBuFF, InBytesBuFF_Length);
-	// Up to 128 bits
-	if(HashValueBuFF_Length >= 16){
+	coder->InBytesBuFF_Length = InBytesBuFF_Length;
+	TheCOE(coder);
+	// Up to 64 bits
+	if(HashValueBuFF_Length >= 8){
 		if(HashValueBuFF == NULL){
 			HashValueBuFF = (unsigned char *)malloc(HashValueBuFF_Length);
 		}
@@ -179,29 +138,16 @@ void WJLHA3(unsigned char *InBytesBuFF, int InBytesBuFF_Length, unsigned char *H
 		if(coder) free(coder);
 		return;
 	}
-	
-	// Fill the message, 512L(bit)=64LByte
-	tmpY_len = ceil(coder->H * (InBytesBuFF_Length + 8));
-	if(tmpY_len < 64.0 * HashValueBuFF_Length){
-		k = (int)(64.0 * HashValueBuFF_Length - tmpY_len);
-	}
-	if(k >= 0){
-		Y_len = (int)(tmpY_len + k);
-	}
-	Y = (unsigned char *)malloc(Y_len * sizeof(unsigned char));
-	// Copy X
-	memcpy(Y, InBytesBuFF, InBytesBuFF_Length);
-	// Fill 0xFF
-	for(i = InBytesBuFF_Length; i < InBytesBuFF_Length + k; ++i){
-		Y[i] = 0xFF;
-	}
-	// Fill coder->p0
-	memcpy(Y + InBytesBuFF_Length + k, &coder->p0, sizeof(double));
     // Encode each bits
 	for(i = 0; i < InBytesBuFF_Length; ++i){
 		for(j = 7; j >= 0; --j){
-			coder->JIELINCOE = coder->COE - (double)InBytesBuFF[i]/100000.0;
 			Encode(coder, ((InBytesBuFF[i] >> j) & 0x01));
+		}
+	}
+	// Encode another 8L symbols 1
+	for(i = 0; i < InBytesBuFF_Length; ++i){
+		for(j = 0; j < 8; ++j){
+			Encode(coder, 0x01);
 		}
 	}
 	FinishEncode(coder);
