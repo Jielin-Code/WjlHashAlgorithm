@@ -138,16 +138,18 @@ void WJLHA3(unsigned char *InBytesBuFF,unsigned int InBytesBuFF_Length, unsigned
 		if(coder) free(coder);
 		return;
 	}
-    // Encode each bits
+        // Encode each bits
 	for(i = 0; i < InBytesBuFF_Length; ++i){
 		for(j = 7; j >= 0; --j){
 			Encode(coder, ((InBytesBuFF[i] >> j) & 0x01));
 		}
 	}
-	// Encode another 8L symbols 1
-	for(i = 0; i < InBytesBuFF_Length; ++i){
-		for(j = 0; j < 8; ++j){
-			Encode(coder, 0x01);
+	if(InBytesBuFF_Length <= HashValueBuFF_Length){
+		// Encode another 8L + 8 symbols 1
+		for(i = 0; i < InBytesBuFF_Length + 1; ++i){
+			for(j = 0; j < 8; ++j){
+				Encode(coder, 0x01);
+			}
 		}
 	}
 	FinishEncode(coder);
